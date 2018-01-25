@@ -1,0 +1,26 @@
+{
+  "name": "vaderlab-event-server",
+  "version": "1.0.0",
+  "description": "Temporary solution for the delivering notifications",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vaderlab-com/EventServer.git"
+  },
+  "keywords": [
+    "events",
+    "node",
+    "nodejs",
+    "push",
+    "notifications"
+  ],
+  "author": "Stanislau Komar",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vaderlab-com/EventServer/issues"
+  },
+  "homepage": "https://github.com/vaderlab-com/EventServer#readme"
+}
