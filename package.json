@@ -2,9 +2,10 @@
   "name": "vaderlab-event-server",
   "version": "1.0.0",
   "description": "Temporary solution for the delivering notifications",
-  "main": "index.js",
+  "main": "node index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
@@ -22,5 +23,13 @@
   "bugs": {
     "url": "https://github.com/vaderlab-com/EventServer/issues"
   },
-  "homepage": "https://github.com/vaderlab-com/EventServer#readme"
+  "homepage": "https://github.com/vaderlab-com/EventServer#readme",
+  "dependencies": {
+    "express": "^4.16.2",
+    "request": "^2.83.0",
+    "request-promise": "^4.2.2",
+    "uuid": "^3.2.1",
+    "winston": "^2.4.0",
+    "ws": "^4.0.0"
+  }
 }
