@@ -1,13 +1,30 @@
 {
-  "log_level": "debug",
-  "vaderlab": {
-    "base_api_url": "http://www.vaderlab.com/api/"
-  },
-  "event_server": {
-    "host": "127.0.0.1",
-    "port": "8080",
-    "ssl": false,
-    "ssl_key": "",
-    "ssl_cert": ""
-  }
+ "environment": "prod",
+ "logs": {
+   "level": "debug",
+   "transports_enabled": [ "console", "file" ],
+   "transports": {
+     "console": {
+       "colorize": true,
+       "level": "debug"
+     },
+     "file":  {
+       "filename": "./logs/events.log",
+       "level": "error"
+     },
+     "http": {},
+     "memory": {}
+   }
+ },
+ "vaderlab": {
+   "base_api_url": "http://www.vaderlab.com/api/"
+ },
+ "event_server": {
+   "host": "127.0.0.1",
+   "port": "443",
+   "auth_timeout": 20000,
+   "ssl": true,
+   "ssl_key": "./cert/private.key",
+   "ssl_cert": "./cert/public.cert"
+ }
 }

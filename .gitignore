@@ -1,3 +1,5 @@
 .idea/
+cert/
+logs/
 node_modules/
-config/parameters.js
+config/parameters.json

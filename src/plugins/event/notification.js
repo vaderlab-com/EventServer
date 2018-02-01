@@ -3,7 +3,8 @@ const
     event_emitter        = require('../../module/core/event_emitter'),
     permissions          = require('../../module/permission/permission'),
 
-    E_ACT_NOTIFY         = 'action.notify'
+    E_ACT_NOTIFY         = 'action.notify',
+    E_ACT_NOTIFY_ERR     = 'action.notify.error'
 ;
 
 function notification_action(message_data, sender_socket) {

@@ -1,14 +1,20 @@
 const
-    Events = require('../core/event_emitter'),
-    actions = {},
-    params_format = ['action'],
+    Events              = require('../core/event_emitter'),
+    actions             = {},
+    params_format       = ['action'],
 
-    E_EXECUTE = 'router.execute',
-    E_EXECUTE_ERR = 'route.execute.error_format',
-    E_EXECUTE_R_NONE = 'router.execute.route.none',
-    E_EXECUTE_R_EXC  = 'router.execute.route.exception'
+    E_EXECUTE           = 'router.execute',
+    E_EXECUTE_ERR       = 'route.execute.error_format',
+    E_EXECUTE_R_NONE    = 'router.execute.route.none',
+    E_EXECUTE_R_EXC     = 'router.execute.route.exception'
 ;
 
+/**
+ *
+ * @param message
+ * @param ws
+ * @returns {*}
+ */
 function execute_msg(message, ws) {
     if(!message) {
         return null;
@@ -23,10 +29,22 @@ function execute_msg(message, ws) {
     return null;
 }
 
+/**
+ *
+ * @param path
+ * @param callable
+ */
 function append_action(path, callable) {
     actions[path] = callable;
 }
 
+/**
+ *
+ * @param req
+ * @param ws
+ * @returns {boolean}
+ * @private
+ */
 function _on_action(req, ws) {
     for(let i = 0; i < params_format.length; i++) {
         const tmp_format = params_format[i];

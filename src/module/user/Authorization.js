@@ -8,6 +8,8 @@ const
     E_REQ_ERR       = 'auth.request.error'
 ;
 
+let vaderlab_config;
+
 function _create_request(auth_key, bearer) {
     const
         opts        = {}

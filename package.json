@@ -26,10 +26,12 @@
   "homepage": "https://github.com/vaderlab-com/EventServer#readme",
   "dependencies": {
     "express": "^4.16.2",
+    "fs": "0.0.1-security",
+    "https": "^1.0.0",
     "request": "^2.83.0",
     "request-promise": "^4.2.2",
     "uuid": "^3.2.1",
-    "winston": "^2.4.0",
+    "winston": "^3.0.0-rc1",
     "ws": "^4.0.0"
   }
 }
