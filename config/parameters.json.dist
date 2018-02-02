@@ -24,7 +24,7 @@
    "port": "443",
    "auth_timeout": 20000,
    "ssl": true,
-   "ssl_key": "./cert/private.key",
+   "ssl_key": "./cert/private.pem",
    "ssl_cert": "./cert/certificate.pem"
  }
 }
