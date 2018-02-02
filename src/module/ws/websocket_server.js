@@ -21,34 +21,40 @@ const
 
 
 function create_server() {
+    const listen_conf = {
+        port: config.port
+    };
+
+    if(config.host) {
+        listen_conf.host = config.host
+    }
+
     return config.ssl ?
-        create_ssl_server():
-        create_no_ssl_server()
+        create_ssl_server(listen_conf):
+        create_no_ssl_server(listen_conf)
         ;
 }
 
-function create_ssl_server() {
+function create_ssl_server(listen_conf) {
     const
         p_key_dist  = Path.resolve(config.ssl_key),
-        p_cert_dist = Path.resolve(config.cert),
-        privateKey  = fs.readFileSync(p_key_dist, 'utf8'),
-        certificate = fs.readFileSync(p_cert_dist, 'utf8'),
+        p_cert_dist = Path.resolve(config.ssl_cert),
+        privateKey  = Fs.readFileSync(p_key_dist, 'utf8'),
+        certificate = Fs.readFileSync(p_cert_dist, 'utf8'),
 
         credentials = { key: privateKey, cert: certificate },
-        httpsServer = https.createServer(credentials)
+        httpsServer = Https.createServer(credentials)
     ;
 
-    httpsServer.listen(config.port);
+    httpsServer.listen(listen_conf);
 
     return new Wss.Server({
         server: httpsServer
     });
 }
 
-function create_no_ssl_server() {
-    return new Wss.Server({
-        port: config.port
-    })
+function create_no_ssl_server(listen_conf) {
+    return new Wss.Server(listen_conf)
 }
 
 wss.on('connection', (ws, req) => {

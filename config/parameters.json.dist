@@ -1,8 +1,8 @@
 {
  "environment": "prod",
  "logs": {
-   "level": "debug",
-   "transports_enabled": [ "console", "file" ],
+   "level": "error",
+   "transports_enabled": [ "file" ],
    "transports": {
      "console": {
        "colorize": true,
@@ -20,11 +20,11 @@
    "base_api_url": "http://www.vaderlab.com/api/"
  },
  "event_server": {
-   "host": "127.0.0.1",
+   "host": "events.vaderlab.com",
    "port": "443",
    "auth_timeout": 20000,
    "ssl": true,
    "ssl_key": "./cert/private.key",
-   "ssl_cert": "./cert/public.cert"
+   "ssl_cert": "./cert/certificate.pem"
  }
 }
