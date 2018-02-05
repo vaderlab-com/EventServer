@@ -80,11 +80,13 @@ wss.on('connection', (ws, req) => {
                 ws.user = user;
                 User_Collection.append(ws);
                 approved = true;
+                ws.send('OK');
             }).catch((err) => {
                 _event_conn_emit(E_ERR, ws, req, {
                     message: message,
                     err_message: err.message
                 });
+                ws.send(err.message);
                 ws.close();
             });
 
@@ -105,6 +107,7 @@ wss.on('connection', (ws, req) => {
         }
     }, config.auth_timeout );
 });
+
 
 function _event_conn_emit(type, ws, req, err) {
     const
