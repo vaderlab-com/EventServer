@@ -18,7 +18,16 @@ function notification_action(message_data, sender_socket) {
     ;
 
     if(!permissions.check_access(sender, 'ROLE_USER_NOTIFIER')) {
-        return
+        event_emitter.emit(E_ACT_NOTIFY_ERR, {
+            message: 'Permission denied',
+            user_id: rec_id,
+            sender_socket: {
+                id: s_s_id,
+                user_id: s_u_id,
+            }
+        });
+
+        return;
     }
 
     event_emitter.emit(E_ACT_NOTIFY, {
