@@ -1,6 +1,12 @@
 const Access_Denied_Exception = require('./access_denied_exception');
 
-function has_access(user_roles, role_to_access) {
+function has_access(user, role_to_access) {
+    if(!user) {
+        return false;
+    }
+
+    let user_roles = user.roles;
+
     if(!user_roles || !user_roles.length || !role_to_access) {
         return false;
     }
