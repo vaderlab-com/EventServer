@@ -61,13 +61,13 @@ function send(user_id, data) {
             tmp_conn = conns[tmp_c_id]
         ;
 
-        Events.emit(E_CONN_SEND, {
-            connection_id: tmp_conn.id,
-            user_id: user_id,
-            recipients_count: csize
-        });
-
         try {
+            Events.emit(E_CONN_SEND, {
+                connection_id: tmp_conn.id,
+                user_id: user_id,
+                recipients_count: csize
+            });
+
             tmp_conn.send(data);
         } catch(e) {
             Events.emit(E_CONN_ERR, {

@@ -13,21 +13,20 @@ function notification_action(message_data, sender_socket) {
         rec_message = message_data.message,
         s_s_id      = sender_socket.id,
         s_u_id      = sender_socket.user_id,
-        sender      = sender_socket.user,
-        sender_r    = sender.roles
+        sender      = sender_socket.user
     ;
 
-    if(!permissions.check_access(sender, 'ROLE_USER_NOTIFIER')) {
+    try {
+        permissions.check_access(sender, 'ROLE_USER_NOTIFIER');
+    } catch (e) {
         event_emitter.emit(E_ACT_NOTIFY_ERR, {
-            message: 'Permission denied',
+            message: e.message,
             user_id: rec_id,
             sender_socket: {
                 id: s_s_id,
                 user_id: s_u_id,
             }
         });
-
-        return;
     }
 
     event_emitter.emit(E_ACT_NOTIFY, {

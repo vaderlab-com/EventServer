@@ -13,6 +13,7 @@ const
     wss             = create_server(),
 
     E_CONN          = 'websocket.connection',
+    E_ERR_CONN      = 'websocket.err_conn',
     E_DISCONN       = 'websocket.disconnect',
     E_MSG           = 'websocket.message',
     E_ERR           = 'websocket.msg_err'
@@ -60,10 +61,15 @@ function create_no_ssl_server(listen_conf) {
 wss.on('connection', (ws, req) => {
     const id = Uuid();
     let approved = false;
+    let waiting_auth = false;
 
     ws.id = id;
     ws.on('close', () => {
         _event_conn_emit(E_DISCONN, ws, req);
+    });
+
+    ws.on('error', function(err) {
+        _event_conn_emit(E_ERR_CONN, ws, req, err)
     });
 
     _event_conn_emit(E_CONN, ws, req);
@@ -75,6 +81,13 @@ wss.on('connection', (ws, req) => {
         }
 
         if(!approved) {
+
+            if(waiting_auth) {
+                return;
+            }
+
+            waiting_auth = true;
+
             User_Module.auth_user(message).then((user) => {
                 ws.user_id = user.id;
                 ws.user = user;
@@ -86,7 +99,7 @@ wss.on('connection', (ws, req) => {
                     message: message,
                     err_message: err.message
                 });
-                ws.send(err.message);
+                //ws.send(err.message);
                 ws.close();
             });
 
