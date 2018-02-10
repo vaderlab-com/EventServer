@@ -55,7 +55,7 @@ function _create_request(auth_key, bearer) {
                     Events.emit(E_REQ, tmp);
                     success(tmp);
                 } catch (e) {
-                    reject('problem with request: ${e.message}');
+                    reject(e.message);
                 }
             });
 
