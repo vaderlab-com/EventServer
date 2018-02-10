@@ -11,11 +11,22 @@ const
     E_CONN_NONE     = 'conn.user.none'
 ;
 
+function terminate(conn) {
+    const status = conn.isAlive === false;
+    if (status) {
+        conn.terminate();
+    }
+
+    return status;
+}
+
 function append(conn) {
     const user_id = conn.user_id;
     if(!connections[user_id]) {
         connections[user_id] = {};
     }
+
+    if()
 
     _conn_evt_listeners(conn);
     connections[user_id][conn.id] = conn;
@@ -84,8 +95,8 @@ function send(user_id, data) {
             tmp_c_id = conn_ids[i],
             tmp_conn = conns[tmp_c_id]
         ;
-        if (tmp_conn.isAlive === false) {
-            tmp_conn.terminate();
+
+        if(terminate(tmp_conn)) {
             break;
         }
 
