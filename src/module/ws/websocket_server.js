@@ -16,7 +16,8 @@ const
     E_ERR_CONN      = 'websocket.err_conn',
     E_DISCONN       = 'websocket.disconnect',
     E_MSG           = 'websocket.message',
-    E_ERR           = 'websocket.msg_err'
+    E_ERR           = 'websocket.msg_err',
+    E_ERR_TIME      = 'websocket.auth_timeout'
 ;
 
 
@@ -137,6 +138,8 @@ wss.on('connection', (ws, req) => {
 
     setTimeout( () => {
         if(!approved) {
+            _event_conn_emit(E_ERR_TIME, ws, req, { message: 'Error authorization by timeout' });
+
             ws.close();
         }
     }, config.auth_timeout );
