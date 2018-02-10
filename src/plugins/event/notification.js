@@ -27,6 +27,8 @@ function notification_action(message_data, sender_socket) {
                 user_id: s_u_id,
             }
         });
+
+        return null;
     }
 
     event_emitter.emit(E_ACT_NOTIFY, {
