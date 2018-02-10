@@ -94,6 +94,7 @@ function send(user_id, data) {
 
             tmp_conn.send(data);
         } catch(e) {
+            remove_connetion(tmp_conn);
             Events.emit(E_CONN_ERR, {
                 connection_id: tmp_conn.id,
                 user_id: user_id,
