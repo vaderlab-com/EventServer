@@ -31,6 +31,25 @@ function get_connections(user_id) {
     return connections[user_id];
 }
 
+
+function remove_connetion(user_id, conn_id) {
+    const conn = connections[user_id][conn_id];
+    if(!conn) {
+        return;
+    }
+
+    const clength = connections[user_id].length;
+    if(!clength) {
+        delete connections[user_id];
+    }
+
+    Events.emit(E_CONN_CLOSE, {
+        connection_id: conn_id,
+        user_id: user_id,
+        user_connections: clength
+    });
+}
+
 function send(user_id, data) {
     const
         conns = get_connections(user_id);
@@ -85,23 +104,10 @@ function _conn_evt_listeners(conn) {
     conn.on('close', () => {
         const
             user_id = conn.user_id,
-            connid = conn.id,
-            conns = get_connections(user_id),
-            ckeys = Object.keys(conns),
-            ckey_length = ckeys.length
+            connid = conn.id
         ;
 
-        delete conns[connid];
-
-        if(ckeys.length === 0) {
-            delete connections[user_id]
-        }
-
-        Events.emit(E_CONN_CLOSE, {
-            connection_id: connid,
-            user_id: user_id,
-            user_connections: ckey_length
-        });
+        remove_connetion(user_id, connid);
     });
 }
 
