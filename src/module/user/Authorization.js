@@ -50,9 +50,13 @@ function _create_request(auth_key, bearer) {
             });
 
             res.on('end', () => {
-                const tmp = JSON.parse(reqData);
-                Events.emit(E_REQ, tmp);
-                success(tmp);
+                try {
+                    const tmp = JSON.parse(reqData);
+                    Events.emit(E_REQ, tmp);
+                    success(tmp);
+                } catch (e) {
+                    reject('problem with request: ${e.message}');
+                }
             });
 
             req.on('error', (e) => {
