@@ -38,6 +38,8 @@ function remove_connetion(user_id, conn_id) {
         return;
     }
 
+    delete connections[user_id][conn_id];
+
     const clength = connections[user_id].length;
     if(!clength) {
         delete connections[user_id];
