@@ -84,6 +84,10 @@ function send(user_id, data) {
             tmp_c_id = conn_ids[i],
             tmp_conn = conns[tmp_c_id]
         ;
+        if (tmp_conn.isAlive === false) {
+            tmp_conn.terminate();
+            break;
+        }
 
         try {
             Events.emit(E_CONN_SEND, {
