@@ -42,8 +42,6 @@ function notification_action(message_data, sender_socket) {
         }
     });
 
-    sender_socket.send('ok');
-
     return user_collection_conn.send(rec_id, rec_message, sender_socket);
 }
 
