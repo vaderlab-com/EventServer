@@ -58,6 +58,17 @@ function create_no_ssl_server(listen_conf) {
     return new Wss.Server(listen_conf)
 }
 
+
+function terminate(conn) {
+    const status = conn.isAlive === false;
+    if (status) {
+        conn.terminate();
+        ws.close()
+    }
+
+    return status;
+}
+
 wss.on('connection', (ws, req) => {
     const id = Uuid();
     let approved = false;
@@ -74,9 +85,18 @@ wss.on('connection', (ws, req) => {
 
     _event_conn_emit(E_CONN, ws, req);
 
+
+    if(terminate(ws)) {
+        return;
+    }
+
     ws.on('message', (message) => {
         if(!message) {
             _event_conn_emit(E_MSG, ws, req);
+            return;
+        }
+
+        if(terminate(ws)) {
             return;
         }
 

@@ -11,17 +11,8 @@ const
     E_CONN_NONE     = 'conn.user.none'
 ;
 
-function terminate(conn) {
-    const status = conn.isAlive === false;
-    if (status) {
-        conn.terminate();
-    }
-
-    return status;
-}
-
 function append(conn) {
-    if(terminate(conn)) {
+    if(conn.isAlive === false) {
         return;
     }
 
