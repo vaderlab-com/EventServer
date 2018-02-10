@@ -117,9 +117,6 @@ wss.on('connection', (ws, req) => {
                 approved = true;
                 this.send('OK');
             }).catch((err) => {
-
-                console.log(err);
-
                 _event_conn_emit(E_ERR, this, req, {
                     message: message,
                     err_message: err.message
@@ -129,8 +126,6 @@ wss.on('connection', (ws, req) => {
 
                 this.close();
             });
-
-            console.log('ggggggg')
 
             return;
         }

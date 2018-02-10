@@ -40,8 +40,10 @@ function _create_request(auth_key, bearer) {
 
     Events.emit(E_REQ_INIT, opts);
 
+    const transport = parsedUrl.protocol === 'https' ? Https : Http;
+
     return new Promise((success, reject) => {
-        const req = Http.request(opts, (res) => {
+        const req = transport.request(opts, (res) => {
             let reqData = '';
             res.setEncoding('utf8');
 
