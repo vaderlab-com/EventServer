@@ -4,6 +4,7 @@ const
     URL             = require('url'),
     Http            = require('http'),
     Https           = require('https'),
+    Request         = require('request'),
     E_REQ_INIT      = 'auth.request.init',
     E_REQ           = 'auth.request',
     E_REQ_ERR       = 'auth.request.error';
@@ -12,16 +13,16 @@ let vaderlab_config;
 
 function _create_request(auth_key, bearer) {
     const
-        url = create_url('user/current.json'),
         method = 'GET',
         query = {},
         headers = {}
         ;
+    let url = create_url('user/current.json');
 
     const parsedUrl = URL.parse(url);
 
     if(auth_key) {
-        parsedUrl.path += '?api_key=' + auth_key;
+        url += '?api_key=' + auth_key;
     }
 
     if(bearer) {
@@ -35,7 +36,9 @@ function _create_request(auth_key, bearer) {
         method: method.toLowerCase(),
         headers: headers,
         searchParams: query,
-        port: parsedUrl.port
+        port: parsedUrl.port,
+        query: parsedUrl.query,
+        url: url
     };
 
     Events.emit(E_REQ_INIT, opts);
@@ -43,7 +46,34 @@ function _create_request(auth_key, bearer) {
     const transport = parsedUrl.protocol === 'https' ? Https : Http;
 
     return new Promise((success, reject) => {
+
+
+        Request({
+            url: opts.url,
+            headers: opts.headers,
+        }, function(error, response, body) {
+            if (!error && response.statusCode === 200) {
+                try {
+                    const tmp = JSON.parse(body);
+                    Events.emit(E_REQ, tmp);
+                    success(tmp);
+                } catch (e) {
+                    Events.emit(E_REQ_ERR, e, body);
+                    console.log(e.message);
+                    reject(e.message);
+                }
+            } else {
+                Events.emit(E_REQ_ERR, error, body);
+                reject(error);
+            }
+        });
+
+
+        /*
         const req = transport.request(opts, (res) => {
+
+            console.log(res);
+
             let reqData = '';
             res.setEncoding('utf8');
 
@@ -58,17 +88,20 @@ function _create_request(auth_key, bearer) {
                     success(tmp);
                 } catch (e) {
                     Events.emit(E_REQ_ERR, e, reqData);
+                    console.log(e.message);
                     reject(e.message);
                 }
             });
 
             req.on('error', (e) => {
                 Events.emit(E_REQ_ERR, e);
+                console.log(e.message);
                 reject('problem with request: ${e.message}');
             });
         });
+        */
 
-        req.end();
+        //req.end();
     });
 }
 
