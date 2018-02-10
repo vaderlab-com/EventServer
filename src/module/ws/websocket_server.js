@@ -60,10 +60,10 @@ function create_no_ssl_server(listen_conf) {
 
 
 function terminate(conn) {
-    const status = conn.OPEN !== conn.OPEN;
+    const status = conn.OPEN !== conn.readyState;
     if (status) {
         conn.terminate();
-        ws.close()
+        conn.close()
     }
 
     return status;
