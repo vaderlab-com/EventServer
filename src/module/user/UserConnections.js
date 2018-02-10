@@ -39,8 +39,13 @@ function get_connections(user_id) {
 function remove_connetion(conn) {
     const user_id = conn.user_id;
     const conn_id = conn.id;
+    const user_conn_coll = connections[user_id];
 
-    const tmp_conn = connections[user_id][conn_id];
+    if(!user_conn_coll) {
+        return;
+    }
+
+    const tmp_conn = user_conn_coll[conn_id];
     if(!tmp_conn) {
         return;
     }
