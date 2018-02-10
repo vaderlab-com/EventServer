@@ -60,7 +60,7 @@ function create_no_ssl_server(listen_conf) {
 
 
 function terminate(conn) {
-    const status = WebSocket.OPEN !== conn.OPEN;
+    const status = conn.OPEN !== conn.OPEN;
     if (status) {
         conn.terminate();
         ws.close()
