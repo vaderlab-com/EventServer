@@ -32,9 +32,11 @@ function get_connections(user_id) {
 }
 
 
-function remove_connetion(user_id, conn_id) {
-    const conn = connections[user_id][conn_id];
-    if(!conn) {
+function remove_connetion(conn) {
+    const user_id = conn.user_id;
+    const conn_id = conn.id;
+    const tmp_conn = connections[user_id][conn_id];
+    if(!tmp_conn) {
         return;
     }
 
@@ -103,13 +105,8 @@ function send(user_id, data) {
 }
 
 function _conn_evt_listeners(conn) {
-    conn.on('close', () => {
-        const
-            user_id = conn.user_id,
-            connid = conn.id
-        ;
-
-        remove_connetion(user_id, connid);
+    conn.on('close', (e) => {
+        remove_connetion(this);
     });
 }
 

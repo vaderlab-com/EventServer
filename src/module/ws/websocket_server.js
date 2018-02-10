@@ -69,7 +69,7 @@ wss.on('connection', (ws, req) => {
     });
 
     ws.on('error', function(err) {
-        _event_conn_emit(E_ERR_CONN, ws, req, err)
+        _event_conn_emit(E_ERR_CONN, ws, req, err);
     });
 
     _event_conn_emit(E_CONN, ws, req);
