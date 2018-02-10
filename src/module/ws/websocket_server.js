@@ -119,7 +119,8 @@ wss.on('connection', (ws, req) => {
                     message: message,
                     err_message: err.message
                 });
-                //ws.send(err.message);
+                terminate(ws);
+
                 ws.close();
             });
 
