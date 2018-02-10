@@ -17,7 +17,7 @@ function notification_action(message_data, sender_socket) {
     ;
 
     try {
-        permissions.check_access(sender, 'ROLE_USER_NOTIFIER');
+        permissions.check_access(sender, 'ROLE_USER_NOTIFICATION');
     } catch (e) {
         event_emitter.emit(E_ACT_NOTIFY_ERR, {
             message: e.message,

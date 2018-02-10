@@ -8,6 +8,7 @@ const
     Config          = require('../../configuration.js'),
     User_Module     = require('../user/Authorization.js'),
     User_Collection = require('../user/UserConnections'),
+    Querystring     = require('querystring')
     routing         = require('./Routing'),
     config          = Config.get_configuration().event_server,
     wss             = create_server(),
@@ -91,13 +92,13 @@ wss.on('connection', (ws, req) => {
         return;
     }
 
-    ws.on('message', (message) => {
+    ws.on('message', function(message) {
         if(!message) {
-            _event_conn_emit(E_MSG, ws, req);
+            _event_conn_emit(E_MSG, this, req);
             return;
         }
 
-        if(terminate(ws)) {
+        if(terminate(this)) {
             return;
         }
 
@@ -110,39 +111,46 @@ wss.on('connection', (ws, req) => {
             waiting_auth = true;
 
             User_Module.auth_user(message).then((user) => {
-                ws.user_id = user.id;
-                ws.user = user;
-                User_Collection.append(ws);
+                this.user_id = user.id;
+                this.user = user;
+                User_Collection.append(this);
                 approved = true;
-                ws.send('OK');
+                this.send('OK');
             }).catch((err) => {
-                _event_conn_emit(E_ERR, ws, req, {
+
+                console.log(err);
+
+                _event_conn_emit(E_ERR, this, req, {
                     message: message,
                     err_message: err.message
                 });
-                terminate(ws);
 
-                ws.close();
+                terminate(this);
+
+                this.close();
             });
+
+            console.log('ggggggg')
 
             return;
         }
 
-        if(!routing.execute_msg(message, ws)) {
-            _event_conn_emit(E_ERR, ws, req, {
+        if(!routing.execute_msg(message, this)) {
+            _event_conn_emit(E_ERR, this, req, {
                 message: 'Error execute message "' + message + '"'
             });
         }
-
     });
 
-    setTimeout( () => {
+    function timeOutCallback() {
         if(!approved) {
-            _event_conn_emit(E_ERR_TIME, ws, req, { message: 'Error authorization by timeout' });
+            _event_conn_emit(E_ERR_TIME, this, req, { message: 'Error authorization by timeout' });
 
-            ws.close();
+            this.close();
         }
-    }, config.auth_timeout );
+    }
+
+    // setTimeout(timeOutCallback.bind(ws) , config.auth_timeout );
 });
 
 

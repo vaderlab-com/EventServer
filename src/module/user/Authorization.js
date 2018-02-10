@@ -1,50 +1,68 @@
 const
     Events          = require('../core/event_emitter'),
-    request         = require('request-promise'),
     configuration   = require('../../configuration.js'),
-
+    URL             = require('url'),
+    Http            = require('http'),
+    Https           = require('https'),
     E_REQ_INIT      = 'auth.request.init',
     E_REQ           = 'auth.request',
-    E_REQ_ERR       = 'auth.request.error'
-;
+    E_REQ_ERR       = 'auth.request.error';
 
 let vaderlab_config;
 
 function _create_request(auth_key, bearer) {
     const
-        opts        = {}
-    ;
+        url = create_url('user/current.json'),
+        method = 'GET',
+        query = {},
+        headers = {}
+        ;
 
-    opts.url = create_url('user/current.json');
-    opts.method = 'GET';
-    opts.json = true;
+    const parsedUrl = URL.parse(url);
 
     if(auth_key) {
-        opts.qs = {
-            api_key: auth_key
-        }
+        parsedUrl.path += '?api_key=' + auth_key;
     }
 
     if(bearer) {
-        opts.headers = {
-            'Authorization': bearer
-        };
+        headers.Authorization = bearer;
     }
+
+    const opts = {
+        protocol: parsedUrl.protocol,
+        host: parsedUrl.hostname,
+        path: parsedUrl.path,
+        method: method.toLowerCase(),
+        headers: headers,
+        searchParams: query,
+        port: parsedUrl.port
+    };
 
     Events.emit(E_REQ_INIT, opts);
 
-    return request(opts)
-        .then(data => {
-            Events.emit(E_REQ, data);
-            return data;
-        })
-        .catch(e => {
-            Events.emit(E_REQ_ERR, e);
+    return new Promise((success, reject) => {
+        const req = Http.request(opts, (res) => {
+            let reqData = '';
+            res.setEncoding('utf8');
 
-            throw e;
-        })
-    ;
+            res.on('data', (chunk) => {
+                reqData += chunk;
+            });
 
+            res.on('end', () => {
+                const tmp = JSON.parse(reqData);
+                Events.emit(E_REQ, tmp);
+                success(tmp);
+            });
+
+            req.on('error', (e) => {
+                Events.emit(E_REQ_ERR, e);
+                reject('problem with request: ${e.message}');
+            });
+        });
+
+        req.end();
+    });
 }
 
 function get_user_by_bearer(bearer) {
@@ -57,7 +75,7 @@ function get_user_by_api_key(key) {
 
 function auth_user(key_or_bearer) {
     if(typeof key_or_bearer !== 'string') {
-        return false;
+        return;
     }
 
     if(key_or_bearer.toLowerCase().indexOf('bearer') === 0) {
