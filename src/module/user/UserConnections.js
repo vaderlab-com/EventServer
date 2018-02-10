@@ -12,7 +12,7 @@ const
 ;
 
 function append(conn) {
-    if(conn.isAlive === false) {
+    if(conn.readyState !== conn.OPEN) {
         return;
     }
 
@@ -89,8 +89,9 @@ function send(user_id, data) {
             tmp_conn = conns[tmp_c_id]
         ;
 
-        if(terminate(tmp_conn)) {
-            break;
+        if(tmp_conn.OPEN !== tmp_conn.readyState) {
+            remove_connetion(tmp_conn);
+            continue;
         }
 
         try {
