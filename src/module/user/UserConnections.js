@@ -21,12 +21,14 @@ function terminate(conn) {
 }
 
 function append(conn) {
+    if(terminate(conn)) {
+        return;
+    }
+
     const user_id = conn.user_id;
     if(!connections[user_id]) {
         connections[user_id] = {};
     }
-
-    if()
 
     _conn_evt_listeners(conn);
     connections[user_id][conn.id] = conn;
