@@ -55,6 +55,7 @@ function _create_request(auth_key, bearer) {
                     Events.emit(E_REQ, tmp);
                     success(tmp);
                 } catch (e) {
+                    Events.emit(E_REQ_ERR, e, reqData);
                     reject(e.message);
                 }
             });
