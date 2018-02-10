@@ -28,7 +28,9 @@ function notification_action(message_data, sender_socket) {
             }
         });
 
-        return null;
+        sender_socket.send('error');
+
+        return;
     }
 
     event_emitter.emit(E_ACT_NOTIFY, {

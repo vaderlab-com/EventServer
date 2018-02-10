@@ -15,9 +15,7 @@ function has_access(user, role_to_access) {
 }
 
 function check_access(user, role_to_access) {
-    const roles = user.roles;
-
-    if(!has_access(roles, role_to_access)) {
+    if(!has_access(user, role_to_access)) {
         throw new Access_Denied_Exception('Access dienied (user_id:' + user.id +') -> role: ' + role_to_access);
     }
 }
